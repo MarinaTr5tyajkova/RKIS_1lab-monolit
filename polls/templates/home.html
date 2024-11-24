@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - My Blog{% endblock %}
+
+{% block content %}
+<h2>Latest Posts</h2>
+
+{% if posts %}
+<ul class="list-group">
+    {% for post in posts %}
+        <li class="list-group-item">
+            <a href="{% url 'post_detail' post.id %}">{{ post.title }}</a> - {{ post.date_posted|date:"F j, Y" }}
+        </li>
+    {% empty %}
+        <li class="list-group-item">No posts available.</li>
+    {% endfor %}
+</ul>
+{% else %}
+    <p>No posts available.</p>
+{% endif %}
+
+{% endblock %}

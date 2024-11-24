@@ -1,0 +1,54 @@
+{% extends "basic.html" %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="content-section">
+                <form method="POST" enctype="multipart/form-data">  <!-- Include enctype for file uploads -->
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">Редактирование профиля</legend>
+
+                        <!-- Display form fields -->
+                        <div class="form-group">
+                            <label for="{{ form.avatar.id_for_label }}">Аватар:</label>
+                            {{ form.avatar|add_class:"form-control-file" }}  <!-- Add Bootstrap styling -->
+                            {% if form.avatar.errors %}
+                                <div class="text-danger">{{ form.avatar.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.username.id_for_label }}">Имя пользователя:</label>
+                            {{ form.username|add_class:"form-control" }}  <!-- Add Bootstrap styling -->
+                            {% if form.username.errors %}
+                                <div class="text-danger">{{ form.username.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.email.id_for_label }}">Email:</label>
+                            {{ form.email|add_class:"form-control" }}  <!-- Add Bootstrap styling -->
+                            {% if form.email.errors %}
+                                <div class="text-danger">{{ form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </fieldset>
+
+                    <div class="form-group">
+                        <button class="btn btn-outline-info" type="submit">Сохранить изменения</button>
+                    </div>
+                </form>
+                <div class="border-top pt-3">
+                    <small class="text-muted">
+                        Вернуться к <a href="{% url 'polls:home' %}" class="ml-2">главной странице</a>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
