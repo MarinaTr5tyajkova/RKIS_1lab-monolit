@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-header">
+                    <h4>Профиль пользователя</h4>
+                </div>
+                <div class="card-body">
+                    {% if user.userprofile.avatar %}
+                        <img src="{{ user.userprofile.avatar.url }}" alt="{{ user.username }}'s avatar" class="rounded-circle" style="width: 150px; height: 150px;">
+                    {% else %}
+                        <img src="{% static 'path/to/default_avatar.png' %}" alt="Default Avatar" class="rounded-circle" style="width: 150px; height: 150px;">
+                    {% endif %}
+                    <h5 class="card-title">{{ user.username }}</h5>
+                    <p class="card-text">{{ user.email }}</p>
+                    <a href="{% url 'polls:edit_profile' %}" class="btn btn-primary">Редактировать профиль</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h3>Дополнительная информация</h3>
+            <p><strong>ФИО:</strong> {{ user.get_full_name }}</p>
+            <!-- Добавьте другие поля профиля по мере необходимости -->
+        </div>
+    </div>
+</div>
+
+<style>
+.rounded-circle {
+    width: 150px; /* Ширина изображения */
+    height: 150px; /* Высота изображения */
+    object-fit: cover; /* Обрезка изображения, чтобы оно заполнило круг */
+    border-radius: 50%; /* Создание круга */
+}
+</style>
+
+{% endblock %}

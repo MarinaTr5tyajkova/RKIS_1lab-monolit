@@ -39,7 +39,7 @@ class EditProfileView(LoginRequiredMixin, UpdateView) :
     model = UserProfile
     form_class = UserProfileForm
     template_name = 'polls/edit_profile.html'
-    success_url = reverse_lazy('polls: home')
+    success_url = reverse_lazy('polls:home')
 
     def get_object(self, queryset = None):
         return self.request.user.userprofile
@@ -90,5 +90,27 @@ class DeleteProfileView(LoginRequiredMixin, View):
         return redirect('polls:home')  # Перенаправление на главную страницу
 
 @login_required
-def profile_redirect(request):
-    return redirect('polls:home')
+def profile(request):
+    return render(request, 'polls/profile.html', {'profile': request.user.userprofile})
+
+def delete_profile(request):
+    user = request.user
+    user.delete()  # Удаляет пользователя и его профиль
+    return redirect('home')  # Перенаправление на главную страницу или другую страницу после удаления.
+
+def edit_profile(request):
+    user = request.user
+    profile = user.userprofile
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        user_form = UserRegistrationForm(request.POST, instance=user)  # Создаем форму для обновления пользователя
+        if form.is_valid() and user_form.is_valid():
+            user_form.save()  # Сохраняем изменения в модели User
+            form.save()  # Сохраняем изменения в модели UserProfile
+            return redirect('polls:profile')  # Перенаправление на страницу профиля после сохранения
+    else:
+        form = UserProfileForm(instance=profile)
+        user_form = UserRegistrationForm(instance=user)  # Заполняем форму данными пользователя
+
+    return render(request, 'polls/edit_profile.html', {'form': form, 'user_form': user_form})

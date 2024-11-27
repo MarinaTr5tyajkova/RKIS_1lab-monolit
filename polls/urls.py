@@ -1,7 +1,9 @@
 from django.urls import path
 from .views import HomeView, RegisterView, EditProfileView, DeleteProfileView, DetailView, ResultsView, vote
 from django.contrib.auth import views as auth_views
-from .views import profile_redirect
+from .views import profile
+from django.conf.urls.static import static
+from django.conf import settings
 
 app_name = 'polls'
 
@@ -15,5 +17,5 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='polls/login.html'), name='login'),  # Login view
     path('logout/', auth_views.LogoutView.as_view(next_page='polls:home'), name='logout'),  # Logout view
     path('delete_profile/', DeleteProfileView.as_view(), name='delete_profile'),
-    path('accounts/profile/', profile_redirect, name='profile_redirect'),
-]
+    path('profile/', profile, name='profile'),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

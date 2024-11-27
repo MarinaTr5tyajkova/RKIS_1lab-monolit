@@ -99,10 +99,14 @@ class LoginForm(forms.Form):
     password = forms.CharField(required=True, max_length=200, label='', widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}))
 
 class UserProfileForm(forms.ModelForm):
+    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    full_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+
     class Meta:
         model = UserProfile
-        fields = ['avatar']
+        fields = ['avatar', 'bio']  # Добавьте другие поля из модели UserProfile по мере необходимости
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['avatar'].widget.attrs.update({'class': 'form-control-file'})
+

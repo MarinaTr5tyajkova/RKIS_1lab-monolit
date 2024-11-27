@@ -20,26 +20,36 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav mx-auto">  <!-- Центрирование элементов навигации -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'polls:home' %}">Home</a>
+                        <a class="nav-link text-white" href="{% url 'polls:home' %}">Home</a>
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'polls:edit_profile' %}">Редактировать профиль</a>  <!-- Link to edit profile -->
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'polls:logout' %}">Выйти</a>  <!-- Link to logout -->
+                            <a class="nav-link text-white" href="{% url 'polls:logout' %}">Выйти</a>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'polls:register' %}">Регистрация</a>  <!-- Link to registration -->
+                            <a class="nav-link text-white" href="{% url 'polls:register' %}">Регистрация</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'polls:login' %}">Вход</a>  <!-- Link to login -->
+                            <a class="nav-link text-white" href="{% url 'polls:login' %}">Вход</a>
                         </li>
                     {% endif %}
                 </ul>
+                <!-- Ссылка на профиль должна быть вне ul для выравнивания вправо -->
+                {% if user.is_authenticated %}
+                    <div class="ml-auto d-flex align-items-center">  <!-- Используем flexbox для выравнивания -->
+                        <a href="{% url 'polls:profile' %}" class="nav-link d-flex align-items-center text-white mx-2">  <!-- Добавлен отступ -->
+                            {% if user.userprofile.avatar %}
+                                <img src="{{ user.userprofile.avatar.url }}" alt="{{ user.username }}'s avatar" class="rounded-circle" style="width: 30px; height: 30px; margin-right: 5px;">
+                            {% else %}
+                                <img src="{% static 'path/to/default_avatar.png' %}" alt="Default Avatar" class="rounded-circle" style="width: 30px; height: 30px; margin-right: 5px;">
+                            {% endif %}
+                            Профиль
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </nav>
     </div>
@@ -50,5 +60,6 @@
     {% block content %}
     {% endblock %}
 </main>
+
 </body>
 </html>

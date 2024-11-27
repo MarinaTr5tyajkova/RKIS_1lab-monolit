@@ -8,6 +8,7 @@ from django.conf import settings
 class UserProfile(models.Model) :
     user = models.OneToOneField(User, on_delete = models.CASCADE)
     avatar = models.ImageField(upload_to = 'avatars/', default ='default_avatar.png')
+    bio = models.TextField(blank=True)
 
     def __str__(self):
         return self.user.username
