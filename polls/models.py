@@ -9,10 +9,10 @@ class UserProfile(models.Model) :
     user = models.OneToOneField(User, on_delete = models.CASCADE)
     avatar = models.ImageField(upload_to = 'avatars/', default ='default_avatar.png')
     bio = models.TextField(blank=True)
+    full_name = models.CharField(max_length=100, blank=True)  # Добавлено поле для ФИО
 
     def __str__(self):
         return self.user.username
-
 
 class Question(models.Model):
     question_text = models.CharField(max_length=200)

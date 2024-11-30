@@ -25,8 +25,10 @@
         </div>
         <div class="col-md-8">
             <h3>Дополнительная информация</h3>
-            <p><strong>ФИО:</strong> {{ user.get_full_name }}</p>
-            <!-- Добавьте другие поля профиля по мере необходимости -->
+            <p><strong>ФИО:</strong> {{ user_profile.full_name }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Биография:</strong> {{ user_profile.bio|default:"Нет информации" }}</p>
+                <!-- Добавьте другие поля профиля по мере необходимости -->
         </div>
     </div>
 </div>

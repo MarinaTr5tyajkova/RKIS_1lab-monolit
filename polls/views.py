@@ -91,17 +91,22 @@ class DeleteProfileView(LoginRequiredMixin, View):
 
 @login_required
 def profile(request):
-    return render(request, 'polls/profile.html', {'profile': request.user.userprofile})
+    user_profile = request.user.userprofile  # Получаем профиль пользователя
+    return render(request, 'polls/profile.html', {
+        'user': request.user,
+        'user_profile': user_profile,
+    })
 
+@login_required
 def delete_profile(request):
     user = request.user
     user.delete()  # Удаляет пользователя и его профиль
     return redirect('home')  # Перенаправление на главную страницу или другую страницу после удаления.
 
+@login_required
 def edit_profile(request):
     user = request.user
     profile = user.userprofile
-
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
         user_form = UserRegistrationForm(request.POST, instance=user)  # Создаем форму для обновления пользователя

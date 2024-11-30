@@ -88,9 +88,10 @@ class UserRegistrationForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit)
-
-        # Создание профиля пользователя с загруженным аватаром
-        UserProfile.objects.create(user=user, avatar=self.cleaned_data['avatar'])
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()
+            UserProfile.objects.create(user=user, avatar=self.cleaned_data['avatar'])
 
         return user
 
