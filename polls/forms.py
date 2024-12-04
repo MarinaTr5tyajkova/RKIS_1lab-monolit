@@ -68,6 +68,12 @@ class UserRegistrationForm(UserCreationForm):
             raise ValidationError('ФИО должно содержать только кириллические буквы, пробелы и дефисы.')
         return full_name
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.exclude(pk=self.instance.pk).filter(email=email).exists():
+            raise ValidationError("Электронная почта уже используется.")
+        return email
+
     def clean_username(self):
         username = self.cleaned_data['username']
         if not re.match(r'^[a-zA-Z0-9\-]+$', username):
@@ -75,7 +81,6 @@ class UserRegistrationForm(UserCreationForm):
 
         if User.objects.filter(username=username).exists():
             raise ValidationError('Этот логин уже занят.')
-
         return username
 
     def clean(self):
@@ -89,9 +94,17 @@ class UserRegistrationForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit)
         user.email = self.cleaned_data['email']
+
         if commit:
             user.save()
-            UserProfile.objects.create(user=user, avatar=self.cleaned_data['avatar'])
+            # Создаем или обновляем профиль пользователя
+            user_profile = UserProfile.objects.create(
+                user=user,
+                avatar=self.cleaned_data['avatar'],
+                full_name=self.cleaned_data['full_name'],
+            )
+
+        return user
 
         return user
 
@@ -100,14 +113,16 @@ class LoginForm(forms.Form):
     password = forms.CharField(required=True, max_length=200, label='', widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}))
 
 class UserProfileForm(forms.ModelForm):
-    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'class': 'form-control'}))
-    full_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(required=True, label='Электронная почта', widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    full_name = forms.CharField(required=True, label='Полное имя', widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = UserProfile
-        fields = ['avatar', 'bio']  # Добавьте другие поля из модели UserProfile по мере необходимости
+        fields = ['avatar', 'bio', 'full_name']  # Добавьте full_name для редактирования
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['avatar'].widget.attrs.update({'class': 'form-control-file'})
-
+        self.fields['bio'].widget.attrs.update({'class': 'form-control', 'rows': 3})
+        self.fields['full_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})

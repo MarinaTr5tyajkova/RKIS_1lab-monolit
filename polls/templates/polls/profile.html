@@ -28,18 +28,8 @@
             <p><strong>ФИО:</strong> {{ user_profile.full_name }}</p>
             <p><strong>Email:</strong> {{ user.email }}</p>
             <p><strong>Биография:</strong> {{ user_profile.bio|default:"Нет информации" }}</p>
-                <!-- Добавьте другие поля профиля по мере необходимости -->
         </div>
     </div>
 </div>
-
-<style>
-.rounded-circle {
-    width: 150px; /* Ширина изображения */
-    height: 150px; /* Высота изображения */
-    object-fit: cover; /* Обрезка изображения, чтобы оно заполнило круг */
-    border-radius: 50%; /* Создание круга */
-}
-</style>
 
 {% endblock %}

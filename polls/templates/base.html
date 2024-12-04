@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">  <!-- Изменено на русский язык -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,21 +8,21 @@
     {% load bootstrap4 %}
     {% load static %}
     {% bootstrap_css %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">  <!-- Your custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
 
 <header class="bg-primary text-white p-3">
     <div class="container d-flex justify-content-between align-items-center">
-        <h1 class="h5">Welcome to My Blog</h1>
+        <h1 class="h5">Голосование</h1>
         <nav class="navbar navbar-expand-lg navbar-light">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Переключить навигацию">  <!-- Изменено на русский -->
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">  <!-- Центрирование элементов навигации -->
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="{% url 'polls:home' %}">Home</a>
+                        <a class="nav-link text-white" href="{% url 'polls:home' %}">Главная</a>
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item">
@@ -37,14 +37,13 @@
                         </li>
                     {% endif %}
                 </ul>
-                <!-- Ссылка на профиль должна быть вне ul для выравнивания вправо -->
                 {% if user.is_authenticated %}
-                    <div class="ml-auto d-flex align-items-center">  <!-- Используем flexbox для выравнивания -->
-                        <a href="{% url 'polls:profile' %}" class="nav-link d-flex align-items-center text-white mx-2">  <!-- Добавлен отступ -->
+                    <div class="ml-auto d-flex align-items-center">
+                        <a href="{% url 'polls:profile' %}" class="nav-link d-flex align-items-center text-white mx-2">
                             {% if user.userprofile.avatar %}
                                 <img src="{{ user.userprofile.avatar.url }}" alt="{{ user.username }}'s avatar" class="rounded-circle" style="width: 30px; height: 30px; margin-right: 5px;">
                             {% else %}
-                                <img src="{% static 'path/to/default_avatar.png' %}" alt="Default Avatar" class="rounded-circle" style="width: 30px; height: 30px; margin-right: 5px;">
+                                <img src="{% static 'path/to/default_avatar.png' %}" alt="Default avatar" class="rounded-circle" style="width: 30px; height: 30px; margin-right: 5px;">
                             {% endif %}
                             Профиль
                         </a>

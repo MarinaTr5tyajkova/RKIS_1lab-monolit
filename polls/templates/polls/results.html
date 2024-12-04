@@ -1,7 +1,16 @@
-<h1>{{ question.question_text }}</h1>
-<ul>
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="mb-5 text-center">{{ question.question_text }}</h1>
+
+<ul class="list-group mb-5">
     {% for choice in question.choice_set.all %}
-    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{choice.votes|pluralize}}</li>
+    <li class="list-group-item">
+        {{ choice.choice_text }} <span class="badge badge-success float-right">{{ choice.votes }} голос{{ choice.votes|pluralize }}</span>
+    </li>
     {% endfor %}
 </ul>
-<a href="{% url 'polls:detail'  question.id %}">выбрать еще раз? </a>
+
+<a class="btn btn-secondary" href="{% url 'polls:index' %}">Назад к опросам</a>
+<a class="btn btn-dark" href="{% url 'polls:detail' question.id %}">Проголосовать снова?</a>
+{% endblock %}
