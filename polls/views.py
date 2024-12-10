@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, logout
 from django.views.generic import ListView, DetailView, UpdateView, View
-from .models import UserProfile, Post, Question, Choice
+from .models import UserProfile, Post, Question, Choice, Vote
 from django.urls import reverse_lazy
-from .forms import UserProfileForm, UserRegistrationForm
+from .forms import UserProfileForm, UserRegistrationForm, QuestionForm, ChoiceForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
@@ -77,12 +77,19 @@ class ResultsView(DetailView):
 
 
 # Класс для голосования по вопросу
-class VoteView(LoginRequiredMixin, View):  # Добавляем LoginRequiredMixin для проверки авторизации пользователя
+class VoteView(LoginRequiredMixin, View):
     def post(self, request, question_id):
         question = get_object_or_404(Question, pk=question_id)
 
+        # Проверяем, проголосовал ли пользователь за этот вопрос
+        if Vote.objects.filter(user=request.user, question=question).exists():
+            return render(request, 'polls/detail.html', {
+                'question': question,
+                'error_message': "Вы уже проголосовали за этот опрос.",
+            })
+
         try:
-            selected_choice = question.choice_set.get(pk=request.POST['choice'])
+            selected_choice = question.choices.get(pk=request.POST['choice'])
         except (KeyError, Choice.DoesNotExist):
             return render(request, 'polls/detail.html', {
                 'question': question,
@@ -91,8 +98,11 @@ class VoteView(LoginRequiredMixin, View):  # Добавляем LoginRequiredMix
         else:
             selected_choice.votes += 1
             selected_choice.save()
-            return redirect('polls:results', question.id)
 
+            # Сохраняем информацию о голосе
+            Vote.objects.create(user=request.user, question=question)
+
+            return redirect('polls:results', question.id)
 
 # Удаление профиля пользователя
 class DeleteProfileView(LoginRequiredMixin, View):
@@ -110,3 +120,31 @@ def profile(request):
         'user': request.user,
         'user_profile': user_profile,
     })
+
+class CreateQuestionView(View):
+    def get(self, request):
+        question_form = QuestionForm()
+        choice_form = ChoiceForm()
+        return render(request, 'polls/create_question.html', {
+            'question_form': question_form,
+            'choice_form': choice_form,
+        })
+
+    def post(self, request):
+        question_form = QuestionForm(request.POST)
+        choice_form = ChoiceForm(request.POST)
+
+        if question_form.is_valid() and choice_form.is_valid():
+            question = question_form.save()  # Сохраняем вопрос
+            choice_texts = request.POST.getlist('choice_text')  # Получаем варианты ответов из формы
+
+            for text in choice_texts:
+                if text:  # Проверяем, что текст не пустой
+                    Choice.objects.create(question=question, choice_text=text)
+
+            return redirect('polls:home')  # Перенаправляем на главную страницу после успешного создания
+
+        return render(request, 'polls/create_question.html', {
+            'question_form': question_form,
+            'choice_form': choice_form,
+        })

@@ -15,7 +15,7 @@ class UserProfile(models.Model):
 
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateTimeField('date published', auto_now_add=True)
 
     def was_published_recently(self):
         """Проверяет, был ли вопрос опубликован недавно (в течение последнего дня)."""
@@ -41,3 +41,13 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title  # Возвращает заголовок при печати или отображении объекта
+
+class Vote(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Пользователь, который проголосовал
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)  # Вопрос, за который проголосовали
+
+    class Meta:
+        unique_together = ('user', 'question')  # Уникальная пара (пользователь, вопрос)
+
+    def __str__(self):
+        return f"{self.user.username} voted on {self.question.question_text}"

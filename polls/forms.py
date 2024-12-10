@@ -1,10 +1,19 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import UserProfile
+from .models import UserProfile, Question, Choice
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 import re
 
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['question_text']  # Поля, которые нужно отобразить в форме
+
+class ChoiceForm(forms.ModelForm):
+    class Meta:
+        model = Choice
+        fields = ['choice_text']
 
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField(

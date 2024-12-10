@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<a class="btn btn-secondary btn-sm mb-3" href="{% url 'polls:index' %}">Назад к опросам</a>
+<a class="btn btn-secondary btn-sm mb-3" href="{% url 'polls:home' %}">Назад к опросам</a>
 <h1 class="text-center mb-3">{{ question.question_text }}</h1>
 
 {% if error_message %}
@@ -12,7 +12,7 @@
 
 <form action="{% url 'polls:vote' question.id %}" method="post">
     {% csrf_token %}
-    {% for choice in question.choice_set.all %}
+    {% for choice in question.choices.all %}
     <div class="form-check">
         <input type="radio" name="choice" class="form-check-input" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
         <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
