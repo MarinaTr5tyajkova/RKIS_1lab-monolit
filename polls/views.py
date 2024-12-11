@@ -52,7 +52,16 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
         return self.request.user.userprofile
 
     def form_valid(self, form):
-        form.save()
+        # Сохранение профиля пользователя
+        user_profile = form.save(commit=False)
+        user_profile.save()
+
+        # Обновление email пользователя
+        email = self.request.POST.get('email')
+        user = self.request.user
+        user.email = email
+        user.save()
+
         return super().form_valid(form)
 
 
@@ -124,17 +133,14 @@ def profile(request):
 class CreateQuestionView(View):
     def get(self, request):
         question_form = QuestionForm()
-        choice_form = ChoiceForm()
         return render(request, 'polls/create_question.html', {
             'question_form': question_form,
-            'choice_form': choice_form,
         })
 
     def post(self, request):
-        question_form = QuestionForm(request.POST)
-        choice_form = ChoiceForm(request.POST)
+        question_form = QuestionForm(request.POST, request.FILES)  # Добавлено request.FILES
 
-        if question_form.is_valid() and choice_form.is_valid():
+        if question_form.is_valid():
             question = question_form.save()  # Сохраняем вопрос
             choice_texts = request.POST.getlist('choice_text')  # Получаем варианты ответов из формы
 
@@ -146,5 +152,4 @@ class CreateQuestionView(View):
 
         return render(request, 'polls/create_question.html', {
             'question_form': question_form,
-            'choice_form': choice_form,
         })

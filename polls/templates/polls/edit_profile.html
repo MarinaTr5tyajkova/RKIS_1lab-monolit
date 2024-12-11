@@ -22,11 +22,8 @@
                         </div>
 
                         <div class="form-group">
-                            {{ form.email.label }}
-                            {{ form.email }}
-                            {% if form.email.errors %}
-                                <div class="text-danger">{{ form.email.errors }}</div>
-                            {% endif %}
+                            <label for="id_email">{{ form.email.label }}</label>
+                            <input type="email" name="email" class="form-control" id="id_email" value="{{ request.user.email }}" required>
                         </div>
 
                         <div class="form-group">

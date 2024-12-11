@@ -4,6 +4,10 @@
 <a class="btn btn-secondary btn-sm mb-3" href="{% url 'polls:home' %}">Назад к опросам</a>
 <h1 class="text-center mb-3">{{ question.question_text }}</h1>
 
+{% if question.image %}
+    <img src="{{ question.image.url }}" alt="{{ question.question_text }}" class="img-fluid mb-3" style="width: 500px; height: 500px; object-fit: cover;">
+{% endif %}
+
 {% if error_message %}
 <p class="alert alert-danger">
     <strong>{{ error_message }}</strong>

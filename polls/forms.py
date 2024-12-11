@@ -8,7 +8,7 @@ import re
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['question_text']  # Поля, которые нужно отобразить в форме
+        fields = ['question_text', 'image']
 
 class ChoiceForm(forms.ModelForm):
     class Meta:
@@ -122,16 +122,14 @@ class LoginForm(forms.Form):
     password = forms.CharField(required=True, max_length=200, label='', widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}))
 
 class UserProfileForm(forms.ModelForm):
-    email = forms.EmailField(required=True, label='Электронная почта', widget=forms.EmailInput(attrs={'class': 'form-control'}))
     full_name = forms.CharField(required=True, label='Полное имя', widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = UserProfile
-        fields = ['avatar', 'bio', 'full_name']  # Добавьте full_name для редактирования
+        fields = ['avatar', 'bio', 'full_name']  # Уберите email из полей формы
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['avatar'].widget.attrs.update({'class': 'form-control-file'})
         self.fields['bio'].widget.attrs.update({'class': 'form-control', 'rows': 3})
         self.fields['full_name'].widget.attrs.update({'class': 'form-control'})
-        self.fields['email'].widget.attrs.update({'class': 'form-control'})

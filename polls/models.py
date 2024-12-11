@@ -16,9 +16,9 @@ class UserProfile(models.Model):
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published', auto_now_add=True)
+    image = models.ImageField(upload_to='questions/', blank=True, null=True)  # Поле для изображения
 
     def was_published_recently(self):
-        """Проверяет, был ли вопрос опубликован недавно (в течение последнего дня)."""
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
 
     def __str__(self):

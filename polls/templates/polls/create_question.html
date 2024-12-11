@@ -3,7 +3,7 @@
 {% block content %}
 <h1 class="text-center mb-3">Создать новый опрос</h1>
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">  <!-- Добавлено enctype -->
     {% csrf_token %}
     {{ question_form.as_p }}
     
