@@ -9,6 +9,11 @@ class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
         fields = ['question_text', 'image']
+        # Указываем пользовательские метки для полей
+        labels = {
+            'question_text': 'Текст вопроса',  # Изменяем метку для поля вопроса
+            'image': 'Изображение'  # Изменяем метку для поля изображения
+        }
 
 class ChoiceForm(forms.ModelForm):
     class Meta:

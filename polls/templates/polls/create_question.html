@@ -1,19 +1,23 @@
 {% extends 'base.html' %}
+{% load bootstrap4 %}
 
 {% block content %}
 <h1 class="text-center mb-3">Создать новый опрос</h1>
 
-<form method="post" enctype="multipart/form-data">  <!-- Добавлено enctype -->
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
+        {% csrf_token %}
     {{ question_form.as_p }}
-    
+
     <h2>Варианты ответов</h2>
     <div id="choices">
-        <input type="text" name="choice_text" placeholder="Вариант ответа" required>
+        <input type="text" name="choice_text" placeholder="Вариант ответа" required class="form-control mb-2">
     </div>
-    <button type="button" onclick="addChoice()">Добавить вариант ответа</button>
+    <div class="d-flex justify-content-between mt-4">
+        <button type="button" onclick="addChoice()" class="btn btn-secondary">Добавить вариант ответа</button>
+        <input type="submit" value="Создать опрос" class="btn btn-success">
+    </div>
 
-    <input type="submit" value="Создать опрос" class="btn btn-success mt-4">
 </form>
 
 <script>

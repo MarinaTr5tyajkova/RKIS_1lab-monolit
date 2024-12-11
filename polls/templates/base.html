@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">  <!-- Изменено на русский язык -->
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,7 +31,11 @@
                             <a class="nav-link text-white" href="{% url 'polls:create_question' %}">Создать опрос</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{% url 'polls:logout' %}">Выйти</a>
+                            <!-- Форма для выхода из системы -->
+                            <form action="{% url 'polls:logout' %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="nav-link text-white">Выйти</a>
+                            </form>
                         </li>
                     {% else %}
                         <li class="nav-item">
