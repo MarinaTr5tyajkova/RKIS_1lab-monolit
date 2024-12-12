@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 import re
 
+# Форма для вопросов
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
@@ -14,12 +15,13 @@ class QuestionForm(forms.ModelForm):
             'question_text': 'Текст вопроса',  # Изменяем метку для поля вопроса
             'image': 'Изображение'  # Изменяем метку для поля изображения
         }
-
+# Форма для вариантов ответа
 class ChoiceForm(forms.ModelForm):
     class Meta:
         model = Choice
         fields = ['choice_text']
 
+# Форма регистрации пользователя
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField(
         required=True,
@@ -120,18 +122,18 @@ class UserRegistrationForm(UserCreationForm):
 
         return user
 
-        return user
-
+# Форма для входа
 class LoginForm(forms.Form):
     username = forms.CharField(required=True, max_length=200, label='', widget=forms.TextInput(attrs={'placeholder': 'Имя пользователя'}))
     password = forms.CharField(required=True, max_length=200, label='', widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}))
 
+# Форма для редактирования профиля
 class UserProfileForm(forms.ModelForm):
     full_name = forms.CharField(required=True, label='Полное имя', widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = UserProfile
-        fields = ['avatar', 'bio', 'full_name']  # Уберите email из полей формы
+        fields = ['avatar', 'bio', 'full_name']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
